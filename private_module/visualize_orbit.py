@@ -16,7 +16,7 @@ def mark_position(x, y, position_name, color="r"):
     plt.plot(x, y, 'ro', markersize=10, color=color) 
     plt.text(x + 0.4, y + 0.4, position_name, fontsize=12,
             horizontalalignment='left', verticalalignment='bottom')
-
+ 
 
 # Hàm vẽ quỹ đạo mục tiêu
 def plot_orbit(df):
