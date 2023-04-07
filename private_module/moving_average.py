@@ -17,7 +17,7 @@ def simple_moving_average(data, n):
         temp_data[i] = sma
     return temp_data
 
-def exponetial_moving_average(data, n):
+def exponential_moving_average(data, n):
     # Trước khi tính EMA, chỉ số SMA sẽ được tính trước
 
     # Sau đó nhân SMA với trọng số của EMA, được biết đến là "smoothing factor"
@@ -54,7 +54,7 @@ real_data = df['Range (km)']
 # plt.show()
 
 # ########################
-# ema_data = exponetial_moving_average(real_data, n_window)
+# ema_data = exponential_moving_average(real_data, n_window)
 # plt.plot(df['Azimuth (rad)'], real_data, label='real_data')
 # plt.plot(df['Azimuth (rad)'], ema_data, label = 'EMA')
 # plt.title('Using Exponential Moving Average to Smooth Data')
@@ -63,7 +63,7 @@ real_data = df['Range (km)']
 
 
 ########################
-# ema_data = exponetial_moving_average(real_data, n_window)
+# ema_data = exponential_moving_average(real_data, n_window)
 # sma_data = simple_moving_average(real_data, n_window)
 # plt.plot(df['Azimuth (rad)'], sma_data, label = 'SMA')
 # plt.plot(df['Azimuth (rad)'], ema_data, label = 'EMA')
@@ -81,10 +81,10 @@ real_data = df['Range (km)']
 
 
 # ########################
-wma_data = weighted_moving_average(real_data, n_window)
-sma_data = simple_moving_average(real_data, n_window)
-plt.plot(df['Azimuth (rad)'], sma_data, label = 'SMA')
-plt.plot(df['Azimuth (rad)'], wma_data, label = 'WMA')
-plt.title('SMA V/S WMA')
-plt.legend()
-plt.show()
+# wma_data = weighted_moving_average(real_data, n_window)
+# sma_data = simple_moving_average(real_data, n_window)
+# plt.plot(df['Azimuth (rad)'], sma_data, label = 'SMA')
+# plt.plot(df['Azimuth (rad)'], wma_data, label = 'WMA')
+# plt.title('SMA V/S WMA')
+# plt.legend()
+# plt.show()
