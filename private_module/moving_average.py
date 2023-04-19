@@ -6,11 +6,11 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.preprocessing import MinMaxScaler
 # Kỹ thuật này để khi mọi người dùng, không cần phải đổi tên đường dẫn 
 dir_p = os.path.dirname(os.path.abspath(__file__))
-path_to_data = os.path.join(dir_p, '..', 'data', 'measData_ver2.csv')
-
+path_to_data = os.path.join(dir_p, '..', 'data', 'measData.csv')
+path_to_real = os.path.join(dir_p, '..', 'data', 'groundtruthData.csv')
 # Đọc file
 df = pd.read_csv(path_to_data)
-
+df_real = pd.read_csv(path_to_real)
 def simple_moving_average(data, n):
     temp_data = np.full(len(data), np.nan)
     for i in range(n, len(data)):
@@ -50,8 +50,9 @@ def find_best_window(data ,data_real, f_type = 'sma'):
     temp_sma = np.nan_to_num(temp_sma, 0)
     mae = mean_absolute_error(temp_sma, data_real)
     best_window = 1
+    arr_ema = []
     if f_type == 'wma':
-        for j in range(1, 10):
+        for j in range(1, 30):
             n_window = j
             # Ước lượng trung bình dữ liệu 1
             sma_data = weighted_moving_average(data, n_window)
@@ -67,12 +68,13 @@ def find_best_window(data ,data_real, f_type = 'sma'):
 
             # compute mae
             mae_data = mean_absolute_error(data_real, sma_data)
+            arr_ema.append(mae_data)
             if mae_data < mae:
                 mae = mae_data
                 best_window = j
                 print(f'i = {j} and mae_data = {mae_data} ')
     elif f_type == 'ema':
-        for j in range(1, 10):
+        for j in range(1, 30):
             n_window = j
             # Ước lượng trung bình dữ liệu 1
             ema_data = exponential_moving_average(data, n_window)
@@ -88,12 +90,13 @@ def find_best_window(data ,data_real, f_type = 'sma'):
 
             # compute mae
             mae_data = mean_squared_error(data_real, ema_data)
+            arr_ema.append(mae_data)
             if mae_data < mae  :
                 mae = mae_data
                 best_window = j
             print(f'i = {j} and mae_data = {mae_data}')
     else:
-        for j in range(1, 10):
+        for j in range(1, 30):
             n_window = j
             # Ước lượng trung bình dữ liệu 1
             sma_data = simple_moving_average(data, n_window)
@@ -109,15 +112,35 @@ def find_best_window(data ,data_real, f_type = 'sma'):
 
             # compute mae
             mae_data = mean_absolute_error(data_real, sma_data)
+            arr_ema.append(mae_data)
             if mae_data < mae :
                 mae = mae_data
                 best_window = j
             print(f'i = {j} and mae_data = {mae_data}')
-    return best_window
+    return (best_window, arr_ema)
 
+
+raw_data = df['Range (m)']
+real_data =df_real['Range (m)']
+print('mae:', mean_absolute_error(raw_data, real_data))
+print('mse:', mean_squared_error(raw_data, real_data))
+n_window = 5
 ########################
-# sma_data = simple_moving_average(real_data, n_window)
+print('-' * 10)
+sma_data = exponential_moving_average(raw_data, n_window)
+sma_data = np.nan_to_num(sma_data, 0)
+print('mae:', mean_absolute_error(sma_data, real_data))
+print('mse:', mean_squared_error(sma_data, real_data))
+
+print('-' * 10)
+print('sse:',np.sum((sma_data - real_data)**2))
+
+# plt.plot(sma_data, linestyle = '--', c='r')
+# plt.plot(raw_data)
+# plt.plot(real_data)
+
 # plt.plot(df['Azimuth (rad)'], real_data, label='real_data')
+
 # plt.plot(df['Azimuth (rad)'], sma_data, label = 'SMA')
 # plt.title('Using Simple Moving Average to Smooth Data')
 # plt.legend()
