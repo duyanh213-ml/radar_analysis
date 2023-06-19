@@ -4,8 +4,8 @@ from sklearn.metrics import mean_squared_error
 from scipy.signal import savgol_filter
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-# from private_module.moving_average import exponential_moving_average, simple_moving_average, weighted_moving_average
-from moving_average import exponential_moving_average, simple_moving_average, weighted_moving_average
+from private_module.moving_average import exponential_moving_average, simple_moving_average, weighted_moving_average
+# from moving_average import exponential_moving_average, simple_moving_average, weighted_moving_average
 
 df = pd.read_csv('D:\\dulieuD\\Program Language\\New folder\\radar\\radar_analysis\\data\\measData_ver2.csv')
 df_real = pd.read_csv('D:\\dulieuD\\Program Language\\New folder\\radar\\radar_analysis\\data\\groundtruthData_ver2.csv')
@@ -30,7 +30,7 @@ def find_best_window(x_raw, y_raw, x_real, y_real, f_type='ema'):
             print('smooth:', i)
         best_tuple = min(list_index, key=lambda x: x[2])
         # return best_tuple
-        return list_index
+        return best_tuple
     elif f_type == 'wma':
         list_index = []
         # Create a list contains a list of value want to compare
@@ -98,22 +98,22 @@ def find_best_method(data ,data_real, f_type = 'sma', num_loop=100, smooth=2):
             arr_rmse.append(mde_0)
     return arr_rmse
 
-x_raw = df['x-axis'].values
-x_real = df_real['x-axis'].values
-y_raw = df['y-axis'].values
-y_real = df_real['y-axis'].values
+# x_raw = df['x-axis'].values
+# x_real = df_real['x-axis'].values
+# y_raw = df['y-axis'].values
+# y_real = df_real['y-axis'].values
 
-# temp = find_best_method([x_raw, y_raw], [x_real, y_real], f_type='ema')
-temp = find_best_window(x_raw, y_raw, x_real, y_real)
-temp_df = pd.DataFrame(temp, columns=['Smooth', 'Window', 'MDE'])
+# # temp = find_best_method([x_raw, y_raw], [x_real, y_real], f_type='ema')
+# temp = find_best_window(x_raw, y_raw, x_real, y_real)
+# temp_df = pd.DataFrame(temp, columns=['Smooth', 'Window', 'MDE'])
 
-# filter the DataFrame to only include rows where MDE is less than or equal to 1
-df_filtered = temp_df[temp_df['MDE'] <= 1]
+# # filter the DataFrame to only include rows where MDE is less than or equal to 1
+# df_filtered = temp_df[temp_df['MDE'] <= 1]
 
-# plot the filtered DataFrame
-df_filtered.plot(x='Smooth', y='MDE', kind='line')
-plt.show()
+# # plot the filtered DataFrame
+# df_filtered.plot(x='Smooth', y='MDE', kind='line')
+# plt.show()
 
-best_tuple = min(temp, key=lambda x: x[2])
-print(best_tuple)
-# # print(mde(x_real, x_raw, y_real, y_raw))
+# best_tuple = min(temp, key=lambda x: x[2])
+# print(best_tuple)
+# # # print(mde(x_real, x_raw, y_real, y_raw))
